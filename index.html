@@ -126,8 +126,8 @@
   <h1 id="mainTitle">化学 2学期末試験対策</h1>
 
   <div id="controls">
-        <button class="tag-btn" data-tag="chemistry">化学演習 (全41問)</button>
-      </div>
+        <button class="tag-btn" data-tag="chemistry">化学演習 (全62問)</button>
+  </div>
 
   <div id="quiz" style="display:none;">
     <div id="question"></div>
@@ -227,18 +227,15 @@
     return a;
   }
 
-  /* csvFileName (chemistry.csvを読み込むように修正) */
+  /* csvFileName (chemistry.csvを読み込むように指定) */
   function csvFileName(tag){
     return {
-      info1:'info1.csv',
-      info2:'info2.csv',
-      appA:'appA.csv',
-      appB:'appB.csv',
-      chemistry:'chemistry.csv' // ▼▼▼ ここを修正しました ▼▼▼
+      // 他のタグも必要であれば残してください
+      chemistry:'chemistry.csv' // ▼▼▼ ここでCSVファイルを指定 ▼▼▼
     }[tag];
   }
 
-  /* startQuiz (取得問題数を全問題数に修正) */
+  /* startQuiz (全問出題するように修正) */
   async function startQuiz(tag){
     document.getElementById('controls').style.display='none';
     document.getElementById('mainTitle').style.display='none'; 
@@ -252,13 +249,13 @@
     }
 
     if (!pool || pool.length === 0) {
-        alert("問題ファイルの読み込みに失敗しました。ファイル名や場所を確認してください。");
+        alert("問題ファイルの読み込みに失敗しました。chemistry.csv が同じ階層にあるか確認してください。");
         document.getElementById('controls').style.display=''; 
         document.getElementById('mainTitle').style.display='block';
         return;
     }
 
-    // 全問(pool.length)を取得するように修正
+    // ▼▼▼ 全問(pool.length)を取得するように修正 ▼▼▼
     questions=shuffle(pool).slice(0,pool.length);  
     current=score=0;
     document.getElementById('result').style.display='none';
@@ -267,16 +264,15 @@
   }
 
   /**
-   * showQuestion関数で .textContent を .innerHTML に変更
-   * (問題文の <br> タグを反映させるため)
+   * showQuestion (innerHTML を使用)
    */
   function showQuestion(){
     const q=questions[current];
-    document.getElementById('question').innerHTML = q.q; // ← HTMLタグを反映させるため
+    document.getElementById('question').innerHTML = q.q; // ← innerHTMLでタグを解釈
     const ul=document.getElementById('options'); ul.innerHTML='';
     q.options.forEach((opt,i)=>{
       const li=document.createElement('li');
-      li.innerHTML=`<button>${opt}</button>`;
+      li.innerHTML=`<button>${opt}</button>`; // ← innerHTMLでタグを解釈
       li.firstChild.onclick=()=>selectAnswer(i);
       ul.appendChild(li);
     });
@@ -284,7 +280,7 @@
   }
 
 
-  /* selectAnswer (変更なし) */
+  /* selectAnswer (innerHTML を使用) */
   function selectAnswer(idx){
     const q=questions[current],ul=document.getElementById('options');
     
@@ -302,12 +298,12 @@
       msgHtml = '<span style="color:green; font-weight: bold;">🟢 正解！</span>';
     } else {
       msgHtml = `<span style="color:red; font-weight: bold;">❌ 不正解</span>
-                 <br><span style="color:#555">正解: ${q.options[q.answer]}</span>`;
+                 <br><span style="color:#555">正解: ${q.options[q.answer]}</span>`; // 正解選択肢もinnerHTMLで解釈
     }
 
     // モーダルの要素を取得して中身をセット
-    document.getElementById('modal-message').innerHTML = msgHtml;
-    document.getElementById('modal-explanation').textContent = "解説: " + q.explanation;
+    document.getElementById('modal-message').innerHTML = msgHtml; // ← innerHTMLでタグを解釈
+    document.getElementById('modal-explanation').innerHTML = "<b>解説:</b> " + q.explanation; // ← innerHTMLでタグを解釈
     
     // オーバーレイ（モーダル）を表示
     document.getElementById('overlay').style.display = 'flex';
