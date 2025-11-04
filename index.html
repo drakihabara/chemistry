@@ -3,129 +3,130 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>化学 2学期末試験対策</title>
+<title>化学 試験対策</title>
 <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 0.5rem;
-      background: #f9f9f9;
-      color: #333;
-      font-size: 18px;
-      line-height: 1.6;
-    }
-    h1 {
-      text-align: center;
-      font-size: 1.8rem;
-      margin: 0.5rem 0 1rem;
-    }
-    .tag-btn, #nextBtn {
-      display: block;
-      width: 100%;
-      padding: 1rem;
-      margin: 0.4rem 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      background: #fff;
-      text-align: center;
-      cursor: pointer;
-    }
-    .tag-btn:hover {
-      background: #f0f0f0;
-    }
-    #question {
-      margin: 0.8rem 0;
-      font-size: 1.2rem;
-      line-height: 1.6;
-    }
-    #options {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    #options li {
-      margin-bottom: 0.5rem;
-    }
-    #options button {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      background: #fff;
-      text-align: left;
-      cursor: pointer;
-    }
-    #options button:disabled {
-      opacity: 0.7;
-      cursor: default;
-    }
-    #progress {
-      font-size: 0.9rem;
-      text-align: center;
-      margin: 0.8rem 0;
-    }
-    #result h2 {
-      text-align: center;
-      margin-top: 1.5rem;
-    }
-    
-    /* オーバーレイ（マスク） */
-    #overlay {
-      position: fixed; /* 画面に固定 */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒 */
-      display: none; /* 通常は非表示 */
-      z-index: 10;
-      /* 縦横中央揃え */
-      align-items: center;
-      justify-content: center;
-    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0.5rem;
+      background: #f9f9f9;
+      color: #333;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin: 0.5rem 0 1rem;
+    }
+    .tag-btn, #nextBtn {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin: 0.4rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      background: #fff;
+      text-align: center;
+      cursor: pointer;
+    }
+    .tag-btn:hover {
+      background: #f0f0f0;
+    }
+    #question {
+      margin: 0.8rem 0;
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
+    #options {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #options li {
+      margin-bottom: 0.5rem;
+    }
+    #options button {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+    }
+    #options button:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
+    #progress {
+      font-size: 0.9rem;
+      text-align: center;
+      margin: 0.8rem 0;
+    }
+    #result h2 {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    
+    /* オーバーレイ（マスク） */
+    #overlay {
+      position: fixed; /* 画面に固定 */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒 */
+      display: none; /* 通常は非表示 */
+      z-index: 10;
+      /* 縦横中央揃え */
+      align-items: center;
+      justify-content: center;
+    }
 
-    /* モーダル（ポップアップ本体） */
-    #modal {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      width: 85%; /* スマホ画面の85% */
-      max-width: 400px; /* PCでも広がりすぎないように */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    #modal-explanation {
-      font-size: 0.95rem;
-      color: #333;
-      margin-top: 1rem;
-      border-top: 1px solid #eee;
-      padding-top: 1rem;
-    }
-    /* モーダル内の「次へ」ボタン */
-    #modalNextBtn {
-      display: block;
-      width: 100%;
-      padding: 1rem;
-      margin-top: 1.5rem;
-      border: none;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      background: #0078d7;
-      color: #fff;
-      cursor: pointer;
-    }
-    #modalNextBtn:hover {
-      background: #005a9e;
-    }
+    /* モーダル（ポップアップ本体） */
+    #modal {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      width: 85%; /* スマホ画面の85% */
+      max-width: 400px; /* PCでも広がりすぎないように */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    #modal-explanation {
+      font-size: 0.95rem;
+      color: #333;
+      margin-top: 1rem;
+      border-top: 1px solid #eee;
+      padding-top: 1rem;
+    }
+    /* モーダル内の「次へ」ボタン */
+    #modalNextBtn {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      background: #0078d7;
+      color: #fff;
+      cursor: pointer;
+    }
+    #modalNextBtn:hover {
+      background: #005a9e;
+    }
 </style>
 </head>
 <body>
 
-  <h1 id="mainTitle">化学 2学期末試験対策</h1>
+    <h1 id="mainTitle">化学 試験対策</h1>
 
   <div id="controls">
-        <button class="tag-btn" data-tag="chemistry">化学</button>
+            <button class="tag-btn" data-tag="chemistry">化学 (2学期末)</button>
+            <button class="tag-btn" data-tag="chem_basics">化学基礎 (大学入試)</button>
   </div>
 
   <div id="quiz" style="display:none;">
@@ -226,36 +227,38 @@
     return a;
   }
 
-  /* csvFileName (chemistry.csvを読み込むように指定) */
+  /* csvFileName (読み込むCSVファイルを指定) */
   function csvFileName(tag){
     return {
-      // 他のタグも必要であれば残してください
-      chemistry:'chemistry.csv' // ▼▼▼ ここでCSVファイルを指定 ▼▼▼
+            chemistry: 'chemistry.csv',
+      chem_basics: 'chemistry_basics.csv' 
     }[tag];
   }
 
-  /* startQuiz (全問出題するように修正) */
+  /* startQuiz (全問出題) */
   async function startQuiz(tag){
     document.getElementById('controls').style.display='none';
     document.getElementById('mainTitle').style.display='none'; 
     
+    const fileName = csvFileName(tag); // ファイル名を取得
     let pool;
     try {
-      pool = await loadCSV(csvFileName(tag));
+      pool = await loadCSV(fileName); // 取得したファイル名を読み込む
     } catch(err) {
       console.error("CSV Load Error:", err);
       pool = []; 
     }
 
     if (!pool || pool.length === 0) {
-        alert("問題ファイルの読み込みに失敗しました。chemistry.csv が同じ階層にあるか確認してください。");
+        // ▼ エラーメッセージを動的に変更 ▼
+        alert(`問題ファイル(${fileName})の読み込みに失敗しました。ファイルが同じ階層にあるか確認してください。`);
         document.getElementById('controls').style.display=''; 
         document.getElementById('mainTitle').style.display='block';
         return;
     }
 
-    // ▼▼▼ 全問(pool.length)を取得するように修正 ▼▼▼
-    questions=shuffle(pool).slice(0,pool.length);  
+    // 全問(pool.length)を取得
+    questions=shuffle(pool).slice(0,pool.length);  
     current=score=0;
     document.getElementById('result').style.display='none';
     document.getElementById('quiz').style.display='';
@@ -311,7 +314,7 @@
 
   /* showResults (変更なし) */
   function showResults(){
-    document.getElementById('quiz').style.display='none';
+  Ddocument.getElementById('quiz').style.display='none';
     const r=document.getElementById('result');
     r.innerHTML=`<h2>結果: ${score}/${questions.length}</h2>`;
     r.style.display='';
