@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>化学 試験対策</title>
 <style>
+    /* ITパスポートアプリのデザインをそのまま適用 */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
@@ -70,18 +71,17 @@
       text-align: center;
       margin-top: 1.5rem;
     }
-    
+
     /* オーバーレイ（マスク） */
     #overlay {
-      position: fixed; /* 画面に固定 */
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒 */
-      display: none; /* 通常は非表示 */
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
       z-index: 10;
-      /* 縦横中央揃え */
       align-items: center;
       justify-content: center;
     }
@@ -91,8 +91,8 @@
       background: #fff;
       padding: 1.5rem;
       border-radius: 8px;
-      width: 85%; /* スマホ画面の85% */
-      max-width: 400px; /* PCでも広がりすぎないように */
+      width: 85%;
+      max-width: 400px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     #modal-explanation {
@@ -250,7 +250,7 @@
     }
 
     if (!pool || pool.length === 0) {
-        // ▼ エラーメッセージを動的に変更 ▼
+        // エラーメッセージ
         alert(`問題ファイル(${fileName})の読み込みに失敗しました。ファイルが同じ階層にあるか確認してください。`);
         document.getElementById('controls').style.display=''; 
         document.getElementById('mainTitle').style.display='block';
@@ -314,7 +314,7 @@
 
   /* showResults (変更なし) */
   function showResults(){
-  Ddocument.getElementById('quiz').style.display='none';
+    document.getElementById('quiz').style.display='none';
     const r=document.getElementById('result');
     r.innerHTML=`<h2>結果: ${score}/${questions.length}</h2>`;
     r.style.display='';
