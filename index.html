@@ -3,326 +3,307 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>化学対策問題集</title>
-<style>
-    /* スタイルは変更なし */
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 0.5rem;
-      background: #f9f9f9;
-      color: #333;
-      font-size: 18px;
-      line-height: 1.6;
-    }
-    h1 {
-      text-align: center;
-      font-size: 1.8rem;
-      margin: 0.5rem 0 1rem;
-    }
-    .tag-btn, #nextBtn {
-      display: block;
-      width: 100%;
-      padding: 1rem;
-      margin: 0.4rem 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      background: #fff;
-      text-align: center;
-      cursor: pointer;
-    }
-    .tag-btn:hover {
-      background: #f0f0f0;
-    }
-    #question {
-      margin: 0.8rem 0;
-      font-size: 1.2rem;
-      line-height: 1.6;
-    }
-    #options {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    #options li {
-      margin-bottom: 0.5rem;
-    }
-    #options button {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      background: #fff;
-      text-align: left;
-      cursor: pointer;
-    }
-    #options button:disabled {
-      opacity: 0.7;
-      cursor: default;
-    }
-    #progress {
-      font-size: 0.9rem;
-      text-align: center;
-      margin: 0.8rem 0;
-    }
-    #result h2 {
-      text-align: center;
-      margin-top: 1.5rem;
-    }
-
-    /* オーバーレイ（マスク） */
-    #overlay {
-      position: fixed; /* 画面に固定 */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒 */
-      display: none; /* 通常は非表示 */
-      z-index: 10;
-      /* 縦横中央揃え */
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* モーダル（ポップアップ本体） */
-    #modal {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      width: 85%; /* スマホ画面の85% */
-      max-width: 400px; /* PCでも広がりすぎないように */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    #modal-explanation {
-      font-size: 0.95rem;
-  S   color: #333;
-      margin-top: 1rem;
-      border-top: 1px solid #eee;
-      padding-top: 1rem;
-    }
-    /* モーダル内の「次へ」ボタン */
-    #modalNextBtn {
-      display: block;
-      width: 100%;
-      padding: 1rem;
-      margin-top: 1.5rem;
-      border: none;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      background: #0078d7;
-      color: #fff;
-      cursor: pointer;
-    }
-    #modalNextBtn:hover {
-      background: #005a9e;
-    }
+<title>化学対策問題集</title> <style>
+    /* CSS部分は変更なし (正しいデザイン) */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0.5rem;
+      background: #f9f9f9;
+      color: #333;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin: 0.5rem 0 1rem;
+    }
+    .tag-btn, #nextBtn {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin: 0.4rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      background: #fff;
+      text-align: center;
+      cursor: pointer;
+    }
+    .tag-btn:hover {
+      background: #f0f0f0;
+    }
+    #question {
+      margin: 0.8rem 0;
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
+    #options {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #options li {
+      margin-bottom: 0.5rem;
+    }
+    #options button {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+    }
+    #options button:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
+    #progress {
+      font-size: 0.9rem;
+      text-align: center;
+      margin: 0.8rem 0;
+    }
+    #result h2 {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 10;
+      align-items: center;
+      justify-content: center;
+    }
+    #modal {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      width: 85%;
+      max-width: 400px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    #modal-explanation {
+      font-size: 0.95rem;
+      color: #333;
+      margin-top: 1rem;
+      border-top: 1px solid #eee;
+      padding-top: 1rem;
+    }
+    #modalNextBtn {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      background: #0078d7;
+      color: #fff;
+      cursor: pointer;
+    }
+    #modalNextBtn:hover {
+      background: #005a9e;
+    }
 </style>
 </head>
 <body>
 
-  <h1 id="mainTitle">化学対策問題集</h1>
-  <div id="controls">
-      <button class="tag-btn" data-tag="basic">化学基礎</button>
-      <button class="tag-btn" data-tag="advanced">化学</button>
-  </div>
+  <h1 id="mainTitle">化学対策問題集</h1> <div id="controls">
+      <button class="tag-btn" data-tag="basic">化学基礎</button>
+      <button class="tag-btn" data-tag="advanced">化学</button>
+  </div>
+  <div id="quiz" style="display:none;">
+    <div id="question"></div>
+    <ul id="options"></ul>
+    <div id="progress"></div>
+  </div>
 
-  <div id="quiz" style="display:none;">
-    <div id="question"></div>
-    <ul id="options"></ul>
-    <div id="progress"></div>
-  </div>
-
-  <div id="result" style="display:none;"></div>
+  <div id="result" style="display:none;"></div>
 
 
-  <div id="overlay">
-  S <div id="modal">
-      <div id="modal-message"></div>
-      <div id="modal-explanation"></div>
-      <button id="modalNextBtn">次へ ▶</button>
-    </div>
-  </div>
+  <div id="overlay">
+    <div id="modal">
+      <div id="modal-message"></div>
+      <div id="modal-explanation"></div>
+      <button id="modalNextBtn">次へ ▶</button>
+    </div>
+  </div>
 
 <script>
-  let questions=[],current=0,score=0;
+  let questions=[],current=0,score=0;
 
-  // DOMが読み込まれたらイベントリスナーを設定
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.tag-btn').forEach(btn=>{
+      btn.onclick=()=>startQuiz(btn.dataset.tag);
+    });
 
-    document.querySelectorAll('.tag-btn').forEach(btn=>{
-      // クリックでstartQuizを呼び出す
-      btn.onclick=()=>startQuiz(btn.dataset.tag);
-    });
-
-    // モーダルの「次へ」ボタンの処理
-    document.getElementById('modalNextBtn').onclick = () => {
-      document.getElementById('overlay').style.display = 'none'; // モーダルを閉じる
-
-      // 次の問題へ進む
-      if (++current < questions.length) {
-        showQuestion();
-      } else {
-        showResults();
-      }
-    };
-  });
+    document.getElementById('modalNextBtn').onclick = () => {
+      document.getElementById('overlay').style.display = 'none';
+      if (++current < questions.length) {
+        showQuestion();
+      } else {
+        showResults();
+      }
+    };
+  });
 
 
-  /* CSVパーサー (変更なし) */
-  async function loadCSV(file){
-    const text = await (await fetch(file)).text();
-    const parseCsvLine = (line) => {
-      const result = [];
-      let currentField = '';
-      let inQuote = false;
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        if (char === '"') {
-          if (inQuote && line[i + 1] === '"') {
-            currentField += '"';
-            i++;
-          } else {
-            inQuote = !inQuote;
-          }
-        } else if (char === ',' && !inQuote) {
-          result.push(currentField);
-          currentField = '';
-        } else {
-          currentField += char;
-        }
-      }
-      result.push(currentField);
-      return result.map(field => {
-        if (field.startsWith('"') && field.endsWith('"')) {
-          return field.substring(1, field.length - 1).replace(/""/g, '"');
-        }
-        return field;
-      });
-    };
-    return text.trim().split(/\r?\n/).slice(1).map(line => {
-      if (!line) return null;
-      const c = parseCsvLine(line);
-      if (c.length < 5) return null;
-      const lastIdx = c.length - 1;
-      const answerIdx = lastIdx - 1;
-      return {
-        q: c[1],
-        options: c.slice(2, answerIdx),
-        answer: +c[answerIdx] - 1,
-        explanation: c[lastIdx]
-      };
-    }).filter(q => q !== null);
-  }
+  /* CSVパーサー (変更なし) */
+  async function loadCSV(file){
+    const text = await (await fetch(file)).text();
+    const parseCsvLine = (line) => {
+      const result = [];
+      let currentField = '';
+      let inQuote = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          if (inQuote && line[i + 1] === '"') {
+            currentField += '"';
+            i++;
+          } else {
+            inQuote = !inQuote;
+          }
+        } else if (char === ',' && !inQuote) {
+          result.push(currentField);
+          currentField = '';
+        } else {
+          currentField += char;
+        }
+      }
+      result.push(currentField);
+      return result.map(field => {
+        if (field.startsWith('"') && field.endsWith('"')) {
+          return field.substring(1, field.length - 1).replace(/""/g, '"');
+        }
+        return field;
+      });
+    };
+    return text.trim().split(/\r?\n/).slice(1).map(line => {
+      if (!line) return null;
+      const c = parseCsvLine(line);
+      if (c.length < 5) return null;
+      const lastIdx = c.length - 1;
+      const answerIdx = lastIdx - 1;
+      return {
+        q: c[1],
+        options: c.slice(2, answerIdx),
+        answer: +c[answerIdx] - 1,
+        explanation: c[lastIdx]
+      };
+    }).filter(q => q !== null);
+  }
 
-  /* shuffle (変更なし) */
-  function shuffle(a){
-    for(let i=a.length-1;i>0;i--){
-      const j=Math.floor(Math.random()*(i+1));
-      [a[i],a[j]]=[a[j],a[i]];
-    }
-    return a;
-  }
+  /* shuffle (変更なし) */
+  function shuffle(a){
+    for(let i=a.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
 
-  /* csvFileName (★変更済み) */
-  function csvFileName(tag){
-    return {
-      basic: 'basic.csv',    // 「化学基礎」ボタンが押されたとき
-      advanced: 'advanced.csv' // 「化学」ボタンが押されたとき
-    }[tag];
-S }
+  /* csvFileName (★変更 3/3) */
+  function csvFileName(tag){
+    // ▼▼▼ ここを修正しました ▼▼▼
+    return {
+      basic: 'basic.csv',     // 「化学基礎」
+      advanced: 'advanced.csv' // 「化学」
+    }[tag];
+  }
 
-  /* startQuiz (変更なし) */
-  async function startQuiz(tag){
-    document.getElementById('controls').style.display='none';
-    document.getElementById('mainTitle').style.display='none';
+  /* startQuiz (変更なし) */
+  async function startQuiz(tag){
+    document.getElementById('controls').style.display='none';
+    document.getElementById('mainTitle').style.display='none';
 
-    let pool;
-    const fileName = csvFileName(tag); // ← 修正後の関数からファイル名を取得
-    if (!fileName) {
-        alert("対応するCSVファイルが見つかりません。");
-        document.getElementById('controls').style.display='';
-        document.getElementById('mainTitle').style.display='block';
-        return;
-    }
+    let pool;
+    const fileName = csvFileName(tag);
+    if (!fileName) {
+        alert("対応するCSVファイルが見つかりません。");
+        document.getElementById('controls').style.display='';
+        document.getElementById('mainTitle').style.display='block';
+        return;
+    }
 
-    try {
-      pool = await loadCSV(fileName); // ← 指定されたファイル名を読み込む
-    } catch(err) {
-      console.error("CSV Load Error:", err);
-      pool = [];
-    }
+    try {
+      pool = await loadCSV(fileName);
+    } catch(err) {
+      console.error("CSV Load Error:", err);
+      pool = [];
+    }
 
-    if (!pool || pool.length === 0) {
-        alert(`問題ファイル(${fileName})の読み込みに失敗しました。ファイルが存在するか確認してください。`);
-t       document.getElementById('controls').style.display='';
-        document.getElementById('mainTitle').style.display='block';
-        return;
-    }
+    if (!pool || pool.length === 0) {
+        alert(`問題ファイル(${fileName})の読み込みに失敗しました。ファイルが存在するか確認してください。`);
+        document.getElementById('controls').style.display='';
+        document.getElementById('mainTitle').style.display='block';
+        return;
+    }
 
-    questions=shuffle(pool).slice(0,pool.length);
-    current=score=0;
-    document.getElementById('result').style.display='none';
-    document.getElementById('quiz').style.display='';
-    showQuestion();
-  }
+    questions=shuffle(pool).slice(0,pool.length);
+    current=score=0;
+    document.getElementById('result').style.display='none';
+    document.getElementById('quiz').style.display='';
+    showQuestion();
+  }
 
-  /* showQuestion (変更なし) */
-  function showQuestion(){
-    const q=questions[current];
-    document.getElementById('question').innerHTML = q.q;
-    const ul=document.getElementById('options'); ul.innerHTML='';
-    q.options.forEach((opt,i)=>{
-      const li=document.createElement('li');
-      li.innerHTML=`<button>${opt}</button>`;
-      li.firstChild.onclick=()=>selectAnswer(i);
-      ul.appendChild(li);
-    });
-    document.getElementById('progress').textContent=`${current+1}/${questions.length}`;
-  }
-
-
-  /* selectAnswer (変更なし) */
-  function selectAnswer(idx){
-    const q=questions[current],ul=document.getElementById('options');
-
-    // 選択肢のボタンを無効化＆色付け
-    [...ul.children].forEach((li,i)=>{
-      const b=li.firstChild; b.disabled=true;
-      if(i===q.answer)b.style.background='lightgreen';
-      else if(i===idx)b.style.background='salmon';
-    });
-
-    // モーダルの中身を作成
-    let msgHtml = '';
-    if (idx === q.answer) {
-      score++;
-      msgHtml = '<span style="color:green; font-weight: bold;">🟢 正解！</span>';
-    } else {
-      msgHtml = `<span style="color:red; font-weight: bold;">❌ 不正解</span>
-                  <br><span style="color:#555">正解: ${q.options[q.answer]}</span>`;
-S }
-
-    // モーダルの要素を取得して中身をセット
-    document.getElementById('modal-message').innerHTML = msgHtml;
-    document.getElementById('modal-explanation').innerHTML = "<b>解説:</b> " + q.explanation;
-
-    // オーバーレイ（モーダル）を表示
-    document.getElementById('overlay').style.display = 'flex';
-  }
+  /* showQuestion (変更なし) */
+  function showQuestion(){
+    const q=questions[current];
+    document.getElementById('question').innerHTML = q.q;
+    const ul=document.getElementById('options'); ul.innerHTML='';
+    q.options.forEach((opt,i)=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<button>${opt}</button>`;
+      li.firstChild.onclick=()=>selectAnswer(i);
+      ul.appendChild(li);
+    });
+    document.getElementById('progress').textContent=`${current+1}/${questions.length}`;
+  }
 
 
-  /* showResults (変更なし) */
-  function showResults(){
-    document.getElementById('quiz').style.display='none';
-    const r=document.getElementById('result');
-    r.innerHTML=`<h2>結果: ${score}/${questions.length}</h2>`;
-    r.style.display='';
-    document.getElementById('controls').style.display='';
-    document.getElementById('mainTitle').style.display='block';
-  }
+  /* selectAnswer (変更なし) */
+  function selectAnswer(idx){
+    const q=questions[current],ul=document.getElementById('options');
+
+    [...ul.children].forEach((li,i)=>{
+      const b=li.firstChild; b.disabled=true;
+      if(i===q.answer)b.style.background='lightgreen';
+      else if(i===idx)b.style.background='salmon';
+    });
+
+    let msgHtml = '';
+    if (idx === q.answer) {
+      score++;
+      msgHtml = '<span style="color:green; font-weight: bold;">🟢 正解！</span>';
+    } else {
+      msgHtml = `<span style="color:red; font-weight: bold;">❌ 不正解</span>
+                   <br><span style="color:#555">正解: ${q.options[q.answer]}</span>`;
+    }
+
+    document.getElementById('modal-message').innerHTML = msgHtml;
+    document.getElementById('modal-explanation').innerHTML = "<b>解説:</b> " + q.explanation;
+    document.getElementById('overlay').style.display = 'flex';
+  }
+
+
+  /* showResults (変更なし) */
+  function showResults(){
+    document.getElementById('quiz').style.display='none';
+    const r=document.getElementById('result');
+    r.innerHTML=`<h2>結果: ${score}/${questions.length}</h2>`;
+    r.style.display='';
+    document.getElementById('controls').style.display='';
+    document.getElementById('mainTitle').style.display='block';
+  }
 </script>
 </body>
 </html>
