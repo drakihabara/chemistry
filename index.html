@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>化学対策問題集</title> <style>
+<title>化学対策問題集</title>
+<style>
     /* スタイルは変更なし */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -97,7 +98,7 @@
     }
     #modal-explanation {
       font-size: 0.95rem;
-      color: #333;
+  S   color: #333;
       margin-top: 1rem;
       border-top: 1px solid #eee;
       padding-top: 1rem;
@@ -106,7 +107,7 @@
     #modalNextBtn {
       display: block;
       width: 100%;
-  T    padding: 1rem;
+      padding: 1rem;
       margin-top: 1.5rem;
       border: none;
       border-radius: 6px;
@@ -122,10 +123,11 @@
 </head>
 <body>
 
-  <h1 id="mainTitle">化学対策問題集</h1>   <div id="controls">
-            <button class="tag-btn" data-tag="basic">化学基礎</button>
+  <h1 id="mainTitle">化学対策問題集</h1>
+  <div id="controls">
+      <button class="tag-btn" data-tag="basic">化学基礎</button>
       <button class="tag-btn" data-tag="advanced">化学</button>
-        </div>
+  </div>
 
   <div id="quiz" style="display:none;">
     <div id="question"></div>
@@ -137,7 +139,7 @@
 
 
   <div id="overlay">
-    <div id="modal">
+  S <div id="modal">
       <div id="modal-message"></div>
       <div id="modal-explanation"></div>
       <button id="modalNextBtn">次へ ▶</button>
@@ -153,7 +155,7 @@
     document.querySelectorAll('.tag-btn').forEach(btn=>{
       // クリックでstartQuizを呼び出す
       btn.onclick=()=>startQuiz(btn.dataset.tag);
-  S });
+    });
 
     // モーダルの「次へ」ボタンの処理
     document.getElementById('modalNextBtn').onclick = () => {
@@ -224,14 +226,13 @@
     return a;
   }
 
-  /* csvFileName (★変更 3/3) */
+  /* csvFileName (★変更済み) */
   function csvFileName(tag){
-    // ▼▼▼ ここを修正しました ▼▼▼
     return {
       basic: 'basic.csv',    // 「化学基礎」ボタンが押されたとき
       advanced: 'advanced.csv' // 「化学」ボタンが押されたとき
-S }[tag];
-  }
+    }[tag];
+S }
 
   /* startQuiz (変更なし) */
   async function startQuiz(tag){
@@ -256,7 +257,7 @@ S }[tag];
 
     if (!pool || pool.length === 0) {
         alert(`問題ファイル(${fileName})の読み込みに失敗しました。ファイルが存在するか確認してください。`);
-        document.getElementById('controls').style.display='';
+t       document.getElementById('controls').style.display='';
         document.getElementById('mainTitle').style.display='block';
         return;
     }
@@ -302,7 +303,7 @@ S }[tag];
     } else {
       msgHtml = `<span style="color:red; font-weight: bold;">❌ 不正解</span>
                   <br><span style="color:#555">正解: ${q.options[q.answer]}</span>`;
-    }
+S }
 
     // モーダルの要素を取得して中身をセット
     document.getElementById('modal-message').innerHTML = msgHtml;
