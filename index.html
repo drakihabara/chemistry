@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>化学基礎・生物基礎 単語帳</title>
+<style>
+  :root{
+    --main:#3498db; --main-d:#2c7cb8; --bg:#f0f2f5;
+    --red:#e74c3c; --green:#27ae60; --amber:#d35400;
+    --text:#333; --muted:#8a94a2; --border:#d7dde3;
+    --untouched:#95a5a6; --notyet:#e67e22; --learned:#3498db; --grad:#27ae60;
+    --cat-ch:#9b59b6; --cat-bi:#27ae60;
+  }
+  *{box-sizing:border-box;}
+  body,button{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    touch-action:manipulation; user-select:none; -webkit-tap-highlight-color:transparent;}
+  body{background:var(--bg); margin:0; min-height:100vh; color:var(--text);
+    overflow-x:hidden; padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);}
+  .container{max-width:600px; margin:0 auto; padding:20px 20px 40px;
+    display:flex; flex-direction:column; align-items:center;}
+  .screen{display:none; width:100%; flex-direction:column; align-items:center;}
+  .active{display:flex;}
+  button{border:none; cursor:pointer; font-weight:bold; transition:transform .1s;}
+  button:active:not(:disabled){transform:scale(.97);}
+
+  #screen-home{min-height:calc(100vh - 60px);}
+  .app-title{font-size:30px; font-weight:800; margin:34px 0 26px; text-align:center; letter-spacing:.03em;}
+
+  .home-stats{display:flex; gap:10px; width:100%; max-width:340px; margin-bottom:30px;}
+  .home-stat{flex:1; text-align:center; background:#fff; border:1px solid var(--border);
+    border-radius:14px; padding:12px 2px; font-size:12px; color:var(--muted); font-weight:700;}
+  .home-stat b{display:block; font-size:22px; color:var(--text); margin-top:3px; line-height:1;}
+  .home-stat.g b{color:var(--grad);}
+
+  .cat-list{width:100%; max-width:340px; display:flex; flex-direction:column; gap:16px;}
+  .cat-btn{display:flex; align-items:center; justify-content:space-between;
+    width:100%; padding:22px 22px; border-radius:16px; background:#fff;
+    font-size:20px; font-weight:800; color:var(--text); text-align:left;
+    box-shadow:0 4px 12px rgba(0,0,0,.06); border-left:10px solid var(--border);}
+  .cat-btn .count{font-size:13px; font-weight:700; color:var(--muted);}
+  .cat-btn.ch{border-left-color:var(--cat-ch);}
+  .cat-btn.bi{border-left-color:var(--cat-bi);}
+  .cat-btn.disabled{opacity:.32; pointer-events:none; box-shadow:none;}
+
+  .reset-link{position:fixed; left:0; right:0; bottom:calc(18px + env(safe-area-inset-bottom));
+    text-align:center; font-size:12px; color:#b7bcc4; text-decoration:underline; cursor:pointer;}
+
+  .pool-bar{width:100%; max-width:340px; display:flex; gap:6px; margin-bottom:18px; font-size:12px;}
+  .pool-chip{flex:1; text-align:center; padding:7px 2px; border-radius:10px; background:#fff;
+    border:1px solid var(--border); font-weight:700; color:var(--muted); line-height:1.3;}
+  .pool-chip b{display:block; font-size:15px; margin-top:1px; color:var(--text);}
+  .pool-chip.u{border-top:3px solid var(--untouched);}
+  .pool-chip.n{border-top:3px solid var(--notyet);}
+  .pool-chip.l{border-top:3px solid var(--learned);}
+  .pool-chip.g{border-top:3px solid var(--grad);}
+  #card-container{width:310px; height:380px; margin-bottom:26px;}
+  .card{width:100%; height:100%; background:#fff; border-radius:25px;
+    box-shadow:0 6px 20px rgba(0,0,0,.07); display:flex; flex-direction:column;
+    justify-content:center; align-items:center; padding:28px 26px; cursor:pointer;}
+
+  .slot{width:100%; position:relative; display:flex; align-items:center; justify-content:center; text-align:center;}
+  .slot-word{height:100px;}
+  .slot-def{height:176px;}
+  .slot .txt,.slot .hint{position:absolute; left:0; right:0; padding:0 4px; transition:opacity .18s;}
+  .word-txt{font-size:30px; font-weight:800; color:var(--main); line-height:1.25;}
+  .def-txt{font-size:21px; font-weight:700; color:var(--text); line-height:1.55; text-align:justify;}
+  .def-txt .em{color:var(--main); font-weight:800;}
+  .txt sub,.txt sup{font-size:.68em; line-height:0;}
+  .txt sub{vertical-align:-.25em;}
+  .txt sup{vertical-align:.55em;}
+  .slot .hint{font-size:15px; font-weight:600; color:#c3ccd4;}
+  .slot .txt{opacity:1;}
+  .slot .hint{opacity:0;}
+  .slot.masked .txt{opacity:0;}
+  .slot.masked .hint{opacity:1;}
+  .slot.no-anim .txt,.slot.no-anim .hint{transition:none;}
+  .divider{width:46px; height:3px; background:#eef1f4; border-radius:2px; margin:18px 0; flex:none;}
+  .controls{width:100%; max-width:320px; display:flex; gap:15px;}
+  .action-btn{flex:1; height:64px; border-radius:34px; font-size:17px;
+    box-shadow:0 4px 10px rgba(0,0,0,.05); transition:opacity .15s, transform .1s;}
+  .action-btn:disabled{opacity:.4; cursor:default;}
+  .btn-notyet{background:#ffe0b2; color:var(--amber);}
+  .btn-master{background:#c8e6c9; color:var(--green);}
+
+  #toast{position:fixed; left:50%; top:38%; transform:translate(-50%,-50%);
+    background:rgba(39,174,96,.96); color:#fff; padding:16px 28px; border-radius:40px;
+    font-size:20px; font-weight:800; box-shadow:0 8px 24px rgba(0,0,0,.18);
+    opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200;}
+  #toast.show{opacity:1; top:34%;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div id="screen-home" class="screen active">
+    <div class="app-title">化学基礎・生物基礎</div>
+
+    <div class="home-stats">
+      <div class="home-stat">学習中<b id="h-active">0</b></div>
+      <div class="home-stat g">卒業<b id="h-grad">0</b></div>
+      <div class="home-stat">全体<b id="h-total">0</b></div>
+    </div>
+
+    <div class="cat-list">
+      <button class="cat-btn ch disabled" id="cat-ch" onpointerdown="startVocab('化学基礎')">
+        <span>化学基礎</span><span class="count" id="cnt-ch"></span>
+      </button>
+      <button class="cat-btn bi disabled" id="cat-bi" onpointerdown="startVocab('生物基礎')">
+        <span>生物基礎</span><span class="count" id="cnt-bi"></span>
+      </button>
+    </div>
+
+    <div class="reset-link" onclick="resetAll()">学習データをリセット</div>
+  </div>
+
+  <div id="screen-vocab" class="screen">
+    <div class="pool-bar">
+      <div class="pool-chip u">未着手<b id="c-u">0</b></div>
+      <div class="pool-chip n">まだ<b id="c-n">0</b></div>
+      <div class="pool-chip l">覚えた<b id="c-l">0</b></div>
+      <div class="pool-chip g">卒業<b id="c-g">0</b></div>
+    </div>
+    <div id="card-container">
+      <div class="card" id="card" onpointerdown="revealCard()">
+        <div class="slot slot-word" id="slot-word">
+          <span class="txt word-txt" id="word-txt"></span>
+          <span class="hint">タップして単語を表示</span>
+        </div>
+        <div class="divider"></div>
+        <div class="slot slot-def" id="slot-def">
+          <span class="txt def-txt" id="def-txt"></span>
+          <span class="hint">タップして意味を表示</span>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="action-btn btn-notyet" id="btn-notyet" disabled onpointerdown="answer(false)">まだ...</button>
+      <button class="action-btn btn-master" id="btn-master" disabled onpointerdown="answer(true)">覚えた！</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+
+const P = {UNTOUCHED:"未着手", NOTYET:"まだ", LEARNED:"覚えた", GRAD:"卒業"};
+const GRAD_COUNT = 2;
+const BATCH = 5;
+const RATIO = {[P.UNTOUCHED]:2, [P.NOTYET]:2, [P.LEARNED]:1};
+const KEY_VOCAB = "sci_vocab_v1";
+
+const PREFIX_CAT = {ch:"化学基礎", bi:"生物基礎"};
+const CAT_BTN = {"化学基礎":"cat-ch", "生物基礎":"cat-bi"};
+const CAT_CNT = {"化学基礎":"cnt-ch", "生物基礎":"cnt-bi"};
+
+let TERMS = {};
+let progress = {};
+let activeCat = null;
+let batch = [], batchIdx = 0, revealed = false;
+let answeredInSession = 0, gradThisSession = 0;
+
+window.onload = init;
+async function init(){
+  document.addEventListener('dblclick', e=>e.preventDefault(), {passive:false});
+  progress = load(KEY_VOCAB, {});
+  try{
+    const r = await fetch('terms.json'); TERMS = await r.json();
+  }catch(e){ TERMS = {}; }
+  refreshHome();
+}
+
+function catOf(id){ return PREFIX_CAT[String(id).split('_')[0]] || null; }
+function idsInCat(cat){ return Object.keys(TERMS).filter(id=>catOf(id)===cat); }
+function catCount(cat){ return idsInCat(cat).length; }
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function goHome(){ refreshHome(); show('screen-home'); }
+
+function refreshHome(){
+  const allIds = Object.keys(TERMS);
+  let active=0, grad=0;
+  for(const id of allIds){
+    const p = stateOf(id).pool;
+    if(p===P.NOTYET || p===P.LEARNED) active++;
+    else if(p===P.GRAD) grad++;
+  }
+  document.getElementById('h-active').textContent = active;
+  document.getElementById('h-grad').textContent   = grad;
+  document.getElementById('h-total').textContent  = allIds.length;
+
+  for(const cat in CAT_BTN){
+    const n = catCount(cat);
+    const btn = document.getElementById(CAT_BTN[cat]);
+    const cnt = document.getElementById(CAT_CNT[cat]);
+    if(n>0){ btn.classList.remove('disabled'); cnt.textContent = n + "語"; }
+    else   { btn.classList.add('disabled');    cnt.textContent = ""; }
+  }
+}
+
+function stateOf(id){
+  if(!progress[id]) progress[id] = {pool:P.UNTOUCHED, count:0};
+  return progress[id];
+}
+function idsInPool(pool){
+  return idsInCat(activeCat).filter(id=>stateOf(id).pool===pool);
+}
+function poolCounts(){
+  const c = {[P.UNTOUCHED]:0,[P.NOTYET]:0,[P.LEARNED]:0,[P.GRAD]:0};
+  for(const id of idsInCat(activeCat)) c[stateOf(id).pool]++;
+  return c;
+}
+function dirOf(pool){
+  return (pool===P.UNTOUCHED||pool===P.NOTYET) ? "w2m" : "m2w";
+}
+
+function startVocab(cat){
+  if(catCount(cat)===0) return;
+  activeCat = cat;
+  answeredInSession = 0; gradThisSession = 0;
+  show('screen-vocab');
+  buildBatch();
+  renderCard();
+}
+
+function buildBatch(){
+  batch = []; batchIdx = 0;
+  const grouped = {};
+  for(const p of [P.UNTOUCHED,P.NOTYET,P.LEARNED,P.GRAD]) grouped[p]=shuffle(idsInPool(p));
+  const take=(pool,n)=>{
+    const pick = grouped[pool].filter(id=>!batch.includes(id)).slice(0,n);
+    batch.push(...pick);
+  };
+  take(P.UNTOUCHED, RATIO[P.UNTOUCHED]);
+  take(P.NOTYET,    RATIO[P.NOTYET]);
+  take(P.LEARNED,   RATIO[P.LEARNED]);
+  for(const p of [P.NOTYET,P.LEARNED,P.UNTOUCHED,P.GRAD]){
+    if(batch.length>=BATCH) break;
+    take(p, BATCH-batch.length);
+  }
+  batch = shuffle(batch);
+}
+
+let answerSlot = null;
+function renderCard(){
+  revealed = false;
+  updatePoolBar();
+  const id = batch[batchIdx];
+  const t = TERMS[id];
+  const dir = dirOf(stateOf(id).pool);
+  const slotWord = document.getElementById('slot-word');
+  const slotDef  = document.getElementById('slot-def');
+
+  slotWord.classList.add('no-anim');
+  slotDef.classList.add('no-anim');
+  slotWord.classList.add('masked');
+  slotDef.classList.add('masked');
+
+  document.getElementById('word-txt').innerHTML = fmt(t.name);
+  document.getElementById('def-txt').innerHTML  = fmt(t.def);
+
+  if(dir==="w2m"){
+    slotWord.classList.remove('masked'); answerSlot = slotDef;
+  }else{
+    slotDef.classList.remove('masked');  answerSlot = slotWord;
+  }
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    slotWord.classList.remove('no-anim');
+    slotDef.classList.remove('no-anim');
+  }));
+  setJudge(false);
+}
+function revealCard(){
+  if(revealed) return;
+  revealed = true;
+  if(answerSlot) answerSlot.classList.remove('masked');
+  setJudge(true);
+}
+function setJudge(on){
+  document.getElementById('btn-notyet').disabled = !on;
+  document.getElementById('btn-master').disabled = !on;
+}
+
+function answer(correct){
+  if(!revealed) return;
+  const s = stateOf(batch[batchIdx]);
+  switch(s.pool){
+    case P.UNTOUCHED:
+      if(correct){ s.pool=P.LEARNED; s.count=0; } else { s.pool=P.NOTYET; s.count=0; }
+      break;
+    case P.NOTYET:
+      if(correct){ s.pool=P.LEARNED; s.count=0; } else { s.pool=P.NOTYET; s.count=0; }
+      break;
+    case P.LEARNED:
+      if(correct){
+        s.count++;
+        if(s.count>=GRAD_COUNT){ s.pool=P.GRAD; s.count=GRAD_COUNT; gradThisSession++; }
+      }else{ s.pool=P.NOTYET; s.count=0; }
+      break;
+    case P.GRAD:
+      if(!correct){ s.pool=P.NOTYET; s.count=0; }
+      break;
+  }
+  save(KEY_VOCAB, progress);
+  haptic(correct);
+  next();
+}
+
+function next(){
+  answeredInSession++;
+  batchIdx++;
+  if(answeredInSession % BATCH === 0){
+    const msg = gradThisSession>0 ? `${gradThisSession}語マスター！` : `${answeredInSession}問クリア！`;
+    toast(msg);
+  }
+  if(batchIdx >= batch.length){ buildBatch(); }
+  renderCard();
+}
+
+function updatePoolBar(){
+  const c = poolCounts();
+  document.getElementById('c-u').textContent = c[P.UNTOUCHED];
+  document.getElementById('c-n').textContent = c[P.NOTYET];
+  document.getElementById('c-l').textContent = c[P.LEARNED];
+  document.getElementById('c-g').textContent = c[P.GRAD];
+}
+
+let toastTimer=null;
+function toast(text){
+  const el=document.getElementById('toast');
+  el.textContent=text; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'), 1100);
+}
+
+function fmt(s){
+  const esc=String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return esc
+    .replace(/\*\*(.+?)\*\*/g,'<b class="em">$1</b>')
+    .replace(/_\{([^}]*)\}/g,'<sub>$1</sub>')
+    .replace(/\^\{([^}]*)\}/g,'<sup>$1</sup>');
+}
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];} return a; }
+function load(key,def){ try{return JSON.parse(localStorage.getItem(key))||def;}catch(e){return def;} }
+function save(key,val){ try{localStorage.setItem(key,JSON.stringify(val));}catch(e){} }
+function haptic(good){ if(navigator.vibrate) good?navigator.vibrate(45):navigator.vibrate([25,45,25]); }
+function resetAll(){
+  if(confirm("学習記録をリセットしますか？")){
+    localStorage.removeItem(KEY_VOCAB); progress={}; refreshHome(); toast("リセットしました");
+  }
+}
+</script>
+</body>
+</html>
