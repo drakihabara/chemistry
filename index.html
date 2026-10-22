@@ -160,7 +160,6 @@ let TERMS = {};
 let progress = {};
 let activeCat = null;
 let batch = [], batchIdx = 0, revealed = false;
-let answeredInSession = 0, gradThisSession = 0;
 
 window.onload = init;
 async function init(){
@@ -222,7 +221,6 @@ function dirOf(pool){
 function startVocab(cat){
   if(catCount(cat)===0) return;
   activeCat = cat;
-  answeredInSession = 0; gradThisSession = 0;
   show('screen-vocab');
   buildBatch();
   renderCard();
@@ -300,7 +298,7 @@ function answer(correct){
     case P.LEARNED:
       if(correct){
         s.count++;
-        if(s.count>=GRAD_COUNT){ s.pool=P.GRAD; s.count=GRAD_COUNT; gradThisSession++; }
+        if(s.count>=GRAD_COUNT){ s.pool=P.GRAD; s.count=GRAD_COUNT; }
       }else{ s.pool=P.NOTYET; s.count=0; }
       break;
     case P.GRAD:
@@ -313,12 +311,7 @@ function answer(correct){
 }
 
 function next(){
-  answeredInSession++;
   batchIdx++;
-  if(answeredInSession % BATCH === 0){
-    const msg = gradThisSession>0 ? `${gradThisSession}語マスター！` : `${answeredInSession}問クリア！`;
-    toast(msg);
-  }
   if(batchIdx >= batch.length){ buildBatch(); }
   renderCard();
 }
